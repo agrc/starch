@@ -1,8 +1,0 @@
-{
-    "name": "broadband",
-    "version": "2.10.3",
-    "main": "main",
-    "description": "Broadband Map",
-    "homepage": "https://github.com/agrc/broadband",
-    "dojoBuild": "app.profile.js"
-}
