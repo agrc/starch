@@ -7,6 +7,11 @@ import { LayerSelectorContainer, LayerSelector } from '@agrc/layer-selector';
 import Form from 'react-bootstrap/Form';
 
 
+const LAYERS = {
+  wireline: ['Wireline/1', 'Wireline/0'],
+  fixed: ['FixedWireless/1', 'FixedWireless/0'],
+  mobile: ['MobileWireless/1', 'MobileWireless/0']
+};
 function App() {
   const mapDivRef = useRef();
   const [ filter, setFilter ] = useState({
@@ -14,6 +19,7 @@ function App() {
     fixed: true,
     mobile: true
   });
+  const providerLayer = useRef();
 
   useEffect(() => {
     const initMap = async () => {
@@ -46,10 +52,16 @@ function App() {
         selectorNode);
 
       const layer = new VectorTileLayer({
-        url: config.urls.providerCoverage
+        url: config.urls.providerCoverage,
+        opacity: 0.5
       });
 
+      providerLayer.current = layer;
+
       map.add(layer);
+
+      await layer.when();
+      console.log('initial layer style', layer.currentStyleInfo.style)
     };
 
     initMap();
@@ -57,6 +69,15 @@ function App() {
 
   useEffect(() => {
     console.log('filter useEffect');
+
+    if (providerLayer.current) {
+      Object.keys(LAYERS).forEach(key => {
+        LAYERS[key].forEach(layer => {
+          const visibility = filter[key] ? 'visible' : 'none';
+          providerLayer.current.setLayoutProperties(layer, { visibility });
+        });
+      });
+    }
   }, [filter]);
 
   const onChange = event => {
