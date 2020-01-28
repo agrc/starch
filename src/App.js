@@ -8,9 +8,9 @@ import Form from 'react-bootstrap/Form';
 
 
 const LAYERS = {
-  wireline: ['Wireline/1', 'Wireline/0'],
-  fixed: ['FixedWireless/1', 'FixedWireless/0'],
-  mobile: ['MobileWireless/1', 'MobileWireless/0']
+  wireline: 'Wireline/1',
+  fixed: 'FixedWireless/1',
+  mobile: 'MobileWireless/1'
 };
 function App() {
   const mapDivRef = useRef();
@@ -72,11 +72,9 @@ function App() {
 
     if (providerLayer.current) {
       Object.keys(LAYERS).forEach(key => {
-        LAYERS[key].forEach(layer => {
           const visibility = filter[key] ? 'visible' : 'none';
-          providerLayer.current.setLayoutProperties(layer, { visibility });
+        providerLayer.current.setLayoutProperties(LAYERS[key], { visibility });
         });
-      });
     }
   }, [filter]);
 
