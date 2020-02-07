@@ -10,7 +10,8 @@ export default async () => {
     'esri/layers/VectorTileLayer',
     'esri/layers/WebTileLayer',
     'esri/Map',
-    'esri/views/MapView'
+    'esri/views/MapView',
+    'esri/core/watchUtils'
   ];
 
   const [
@@ -21,7 +22,8 @@ export default async () => {
     VectorTileLayer,
     WebTileLayer,
     Map,
-    MapView
+    MapView,
+    watchUtils
   ] = await loadModules(requires, {
     version: '4.14',
     css: true
@@ -35,6 +37,7 @@ export default async () => {
     VectorTileLayer,
     WebTileLayer,
     Map,
-    MapView
+    MapView,
+    watchUtils
   };
 }

@@ -8,6 +8,7 @@ import Form from 'react-bootstrap/Form';
 import Slider from 'react-rangeslider';
 import 'react-rangeslider/lib/index.css';
 import lodash from 'lodash';
+import loaderSvg from './Eclipse-1s-50px.svg';
 
 
 function App() {
@@ -20,26 +21,47 @@ function App() {
   const providerLayers = useRef();
   const [ up, setUp ] = useState(1);
   const [ down, setDown ] = useState(1);
+  const [ isLoading, setIsLoading ] = useState(false);
+  const loaderNode = useRef();
+  const view = useRef();
+
+  useEffect(() => {
+    if (!view.current) {
+      return;
+    }
+
+    if (isLoading) {
+      view.current.ui.add(loaderNode.current, 'bottom-left');
+    } else {
+      view.current.ui.remove(loaderNode.current);
+    }
+  }, [isLoading]);
 
   useEffect(() => {
     const initMap = async () => {
       console.log('initMap');
-      const { Map, MapView, FeatureLayer } = await getModules();
+      const { Map, MapView, FeatureLayer, watchUtils } = await getModules();
 
       const map = new Map();
-      const view = new MapView({
+      view.current = new MapView({
         container: mapDivRef.current,
         map,
         zoom: 10,
         center: [-112, 40]
       });
 
+      watchUtils.watch(view.current, 'updating', () => {
+        setIsLoading(view.current.updating);
+      });
       const selectorNode = document.createElement('div');
+      view.current.ui.add(selectorNode, 'top-right');
 
-      view.ui.add(selectorNode, 'top-right');
+      loaderNode.current = document.createElement('img');
+      loaderNode.current.src = loaderSvg;
+      loaderNode.current.className = 'loader';
 
       const layerSelectorOptions = {
-        view: view,
+        view: view.current,
         quadWord: process.env.REACT_APP_DISCOVER,
         baseLayers: ['Hybrid', 'Lite', 'Terrain', 'Topo'],
         modules: await getModules()

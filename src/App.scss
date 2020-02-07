@@ -28,5 +28,8 @@ html, body, #root, .app, .esri-view {
   }
   .esri-view {
     flex: 1;
+    .esri-component.loader {
+      box-shadow: none;
+    }
   }
 }
