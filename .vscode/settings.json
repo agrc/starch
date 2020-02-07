@@ -3,7 +3,9 @@
     "MAXADDOWN",
     "MAXADUP",
     "Wireline",
-    "rangeslider"
+    "globby",
+    "rangeslider",
+    "yazl"
   ],
   "python.pythonPath": "C:\\Python27\\ArcGIS10.7\\python.exe",
   "python.formatting.provider": "yapf"
