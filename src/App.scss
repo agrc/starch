@@ -9,6 +9,23 @@ html, body, #root, .app, .esri-view {
 .app {
   display: flex;
   flex-direction: column;
+  .slider-container {
+    width: 350px;
+    padding: 5px;
+    .rangeslider {
+      &.download {
+        margin-left: 36px;
+      }
+      background-color: #7cb342;
+      .rangeslider__fill {
+        background-color: #e6e6e6;
+      }
+      margin-bottom: 30px;
+    }
+  }
+  form {
+    padding: 5px;
+  }
   .esri-view {
     flex: 1;
   }

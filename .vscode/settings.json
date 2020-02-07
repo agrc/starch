@@ -1,7 +1,10 @@
 {
   "cSpell.words": [
-    "Wireline"
+    "MAXADDOWN",
+    "MAXADUP",
+    "Wireline",
+    "rangeslider"
   ],
-  "python.pythonPath": "C:\\Users\\agrc-arcgis\\AppData\\Local\\ESRI\\conda\\envs\\forklift\\python.exe",
+  "python.pythonPath": "C:\\Python27\\ArcGIS10.7\\python.exe",
   "python.formatting.provider": "yapf"
 }

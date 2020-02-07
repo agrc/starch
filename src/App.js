@@ -5,13 +5,11 @@ import getModules from './esriModules';
 import config from './config';
 import { LayerSelectorContainer, LayerSelector } from '@agrc/layer-selector';
 import Form from 'react-bootstrap/Form';
+import Slider from 'react-rangeslider';
+import 'react-rangeslider/lib/index.css';
+import lodash from 'lodash';
 
 
-const LAYERS = {
-  wireline: 'Wireline/1',
-  fixed: 'FixedWireless/1',
-  mobile: 'MobileWireless/1'
-};
 function App() {
   const mapDivRef = useRef();
   const [ filter, setFilter ] = useState({
@@ -19,12 +17,14 @@ function App() {
     fixed: true,
     mobile: true
   });
-  const providerLayer = useRef();
+  const providerLayers = useRef();
+  const [ up, setUp ] = useState(1);
+  const [ down, setDown ] = useState(1);
 
   useEffect(() => {
     const initMap = async () => {
       console.log('initMap');
-      const { Map, MapView, VectorTileLayer } = await getModules();
+      const { Map, MapView, FeatureLayer } = await getModules();
 
       const map = new Map();
       const view = new MapView({
@@ -51,17 +51,17 @@ function App() {
         </LayerSelectorContainer>,
         selectorNode);
 
-      const layer = new VectorTileLayer({
-        url: config.urls.providerCoverage,
-        opacity: 0.5
+      providerLayers.current = lodash.range(9).reverse().map(index => {
+        const layer = new FeatureLayer({
+          url: `${config.urls.providerCoverage}/${index}`,
+          opacity: 0.5,
+          definitionExpression: config.defaultDefinitionExpression
+        });
+        map.add(layer);
+        // layer.on('click', event => console.log('event', event));
+
+        return layer;
       });
-
-      providerLayer.current = layer;
-
-      map.add(layer);
-
-      await layer.when();
-      console.log('initial layer style', layer.currentStyleInfo.style)
     };
 
     initMap();
@@ -70,13 +70,21 @@ function App() {
   useEffect(() => {
     console.log('filter useEffect');
 
-    if (providerLayer.current) {
-      Object.keys(LAYERS).forEach(key => {
-          const visibility = filter[key] ? 'visible' : 'none';
-        providerLayer.current.setLayoutProperties(LAYERS[key], { visibility });
-        });
+    if (providerLayers.current) {
+      const upSpeed = config.speeds[up];
+      const downSpeed = config.speeds[down];
+      const visibleLayerIds = Object.keys(config.layerIds)
+        .filter(key => filter[key])
+        .map(key => config.layerIds[key])
+        .flat()
+      ;
+
+      providerLayers.current.forEach(layer => {
+        layer.visible = visibleLayerIds.indexOf(layer.layerId) > -1;
+        layer.definitionExpression = `MAXADUP >= ${upSpeed} AND MAXADDOWN >= ${downSpeed}`;
+      });
     }
-  }, [filter]);
+  }, [filter, up, down]);
 
   const onChange = event => {
     const target = event.currentTarget;
@@ -88,8 +96,39 @@ function App() {
     });
   };
 
+  const speedLabels = config.speeds.reduce((newObject, speed, index) => {
+    newObject[index] = speed;
+
+    return newObject;
+  }, {});
+  const downloadSpeedLabels = { ...speedLabels };
+  delete downloadSpeedLabels[0];
+
   return (
     <div className="app">
+      <div className="slider-container">
+        Download
+        <Slider
+          className='download'
+          min={1}
+          max={config.speeds.length - 1}
+          step={1}
+          labels={downloadSpeedLabels}
+          value={down}
+          tooltip={false}
+          onChange={value => setDown(value)}
+          />
+        Upload
+        <Slider
+          min={0}
+          max={config.speeds.length - 1}
+          step={1}
+          labels={speedLabels}
+          value={up}
+          tooltip={false}
+          onChange={value => setUp(value)}
+          />
+      </div>
       <Form>
         <Form.Check type="checkbox" label="Wireline" id="wireline" checked={filter.wireline} onChange={onChange} />
         <Form.Check type="checkbox" label="Fixed Wireless" id="fixed" checked={filter.fixed} onChange={onChange} />
