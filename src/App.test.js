@@ -4,6 +4,6 @@ import App from './App';
 
 test('renders', () => {
   const { getByText } = render(<App />);
-  const linkElement = getByText(/app/i);
-  expect(linkElement).toBeInTheDocument();
+  const checkbox = getByText(/wireline/i);
+  expect(checkbox).toBeInTheDocument();
 });
