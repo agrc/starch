@@ -40,4 +40,4 @@ export default async () => {
     MapView,
     watchUtils
   };
-}
+};

@@ -114,7 +114,7 @@ function App() {
       return {
         ...previousFilter,
         [target.id]: !previousFilter[target.id]
-      }
+      };
     });
   };
 
@@ -139,7 +139,7 @@ function App() {
           value={down}
           tooltip={false}
           onChange={value => setDown(value)}
-          />
+        />
         Upload
         <Slider
           min={0}
@@ -149,7 +149,7 @@ function App() {
           value={up}
           tooltip={false}
           onChange={value => setUp(value)}
-          />
+        />
       </div>
       <Form>
         <Form.Check type="checkbox" label="Wireline" id="wireline" checked={filter.wireline} onChange={onChange} />
