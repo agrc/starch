@@ -8,6 +8,6 @@
     "rangeslider",
     "yazl"
   ],
-  "python.pythonPath": "C:\\Python27\\ArcGIS10.7\\python.exe",
+  "python.pythonPath": "C:\\Users\\agrc-arcgis\\AppData\\Local\\ESRI\\conda\\envs\\forklift\\python.exe",
   "python.formatting.provider": "yapf"
 }
