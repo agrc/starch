@@ -15,8 +15,7 @@ function App() {
   const mapDivRef = useRef();
   const [ filter, setFilter ] = useState({
     wireline: true,
-    fixed: true,
-    mobile: true
+    fixed: true
   });
   const providerLayers = useRef();
   const [ up, setUp ] = useState(1);
@@ -63,7 +62,7 @@ function App() {
       const layerSelectorOptions = {
         view: view.current,
         quadWord: process.env.REACT_APP_DISCOVER,
-        baseLayers: ['Hybrid', 'Lite', 'Terrain', 'Topo'],
+        baseLayers: ['Lite', 'Terrain', 'Hybrid'],
         modules: await getModules()
       };
 
@@ -154,7 +153,6 @@ function App() {
       <Form>
         <Form.Check type="checkbox" label="Wireline" id="wireline" checked={filter.wireline} onChange={onChange} />
         <Form.Check type="checkbox" label="Fixed Wireless" id="fixed" checked={filter.fixed} onChange={onChange} />
-        <Form.Check type="checkbox" label="Mobile Wireless" id="mobile" checked={filter.mobile} onChange={onChange} />
       </Form>
       <div ref={mapDivRef}></div>
     </div>

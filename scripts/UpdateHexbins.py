@@ -18,9 +18,8 @@ analysis_prefix = 'JoinedHexagons'
 dissolved_prefix = 'Dissolved'
 keep_fields = ['UTProvCode', 'TransTech', 'MAXADDOWN', 'MAXADUP']
 layer_infos = [['Wireline', 'TransTech IN (10, 20, 30, 40, 41, 50)'],
-               ['FixedWireless', 'TransTech IN (70, 71)'],
-               ['MobileWireless', 'TransTech = 80']]
-
+               ['FixedWireless', 'TransTech IN (70, 71)']]
+provider_coverage_layer = 'provider_coverage_layer'
 
 with arcpy.EnvManager(workspace=database):
     for scale in scales:
@@ -40,9 +39,11 @@ with arcpy.EnvManager(workspace=database):
             if field_map.outputField.name in keep_fields:
                 field_mappings.addFieldMap(field_map)
 
+        print('creating layer...')
+        arcpy.management.MakeFeatureLayer(provider_coverage, provider_coverage_layer, 'TransTech <> 80')
+
         print('running analysis...')
-        arcpy.analysis.SpatialJoin(hexagons, provider_coverage, analysis,
-                                'JOIN_ONE_TO_MANY', 'KEEP_COMMON', field_mappings)
+        arcpy.analysis.SpatialJoin(hexagons, provider_coverage_layer, analysis,
 
         print('removing duplicates...')
         arcpy.management.DeleteIdentical(analysis, ['SHAPE'] + keep_fields)
@@ -55,3 +56,6 @@ with arcpy.EnvManager(workspace=database):
             print(f'exporting {fc_name}')
             layer = arcpy.management.MakeFeatureLayer(dissolved, f'{fc_name}_layer', query)
             arcpy.management.CopyFeatures(layer, fc_name)
+
+        print('deleting layer...')
+        arcpy.management.Delete(provider_coverage_layer)

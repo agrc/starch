@@ -8,8 +8,7 @@ export default {
   speeds,
   layerIds: {
     wireline: [0, 1, 2],
-    fixed: [3, 4, 5],
-    mobile: [6, 7, 8]
+    fixed: [3, 4, 5]
   },
   fieldNames: {
     MAXADUP,
