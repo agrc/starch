@@ -19,6 +19,7 @@ dissolved_prefix = 'Dissolved'
 keep_fields = ['UTProvCode', 'TransTech', 'MAXADDOWN', 'MAXADUP']
 layer_infos = [['Wireline', 'TransTech IN (10, 20, 30, 40, 41, 50)'],
                ['FixedWireless', 'TransTech IN (70, 71)']]
+spatial_search_radius = '-250 meters'
 provider_coverage_layer = 'provider_coverage_layer'
 
 with arcpy.EnvManager(workspace=database):
@@ -44,6 +45,7 @@ with arcpy.EnvManager(workspace=database):
 
         print('running analysis...')
         arcpy.analysis.SpatialJoin(hexagons, provider_coverage_layer, analysis,
+                                'JOIN_ONE_TO_MANY', 'KEEP_COMMON', field_mappings, search_radius=spatial_search_radius)
 
         print('removing duplicates...')
         arcpy.management.DeleteIdentical(analysis, ['SHAPE'] + keep_fields)
