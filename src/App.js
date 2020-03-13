@@ -45,8 +45,13 @@ function App() {
       view.current = new MapView({
         container: mapDivRef.current,
         map,
-        zoom: 10,
-        center: [-112, 40]
+        extent: {
+          xmax: -12612006,
+          xmin: -12246370,
+          ymax: 5125456,
+          ymin: 4473357,
+          spatialReference: 3857
+        }
       });
 
       watchUtils.watch(view.current, 'updating', () => {
