@@ -13,12 +13,12 @@ html, body, #root, .app, .esri-view {
     width: 350px;
     padding: 5px;
     .rangeslider {
-      &.download {
-        margin-left: 36px;
-      }
       background-color: #7cb342;
       .rangeslider__fill {
         background-color: #e6e6e6;
+      }
+      .rangeslider__label-item {
+        font-size: 11px;
       }
       margin-bottom: 30px;
     }

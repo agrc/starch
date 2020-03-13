@@ -18,8 +18,8 @@ function App() {
     fixed: true
   });
   const providerLayers = useRef();
-  const [ up, setUp ] = useState(1);
-  const [ down, setDown ] = useState(1);
+  const [ up, setUp ] = useState(0);
+  const [ down, setDown ] = useState(0);
   const [ isLoading, setIsLoading ] = useState(false);
   const loaderNode = useRef();
   const view = useRef();
@@ -102,7 +102,7 @@ function App() {
 
       providerLayers.current.forEach(layer => {
         layer.visible = visibleLayerIds.indexOf(layer.layerId) > -1;
-        layer.definitionExpression = `MAXADUP >= ${upSpeed} AND MAXADDOWN >= ${downSpeed}`;
+        layer.definitionExpression = `${getDefQueryForSpeed('MAXADUP', upSpeed)} AND ${getDefQueryForSpeed('MAXADDOWN', downSpeed)}`;
       });
     }
   }, [filter, up, down]);
@@ -122,8 +122,6 @@ function App() {
 
     return newObject;
   }, {});
-  const downloadSpeedLabels = { ...speedLabels };
-  delete downloadSpeedLabels[0];
 
   return (
     <div className="app">
@@ -131,10 +129,10 @@ function App() {
         Download
         <Slider
           className='download'
-          min={1}
+          min={0}
           max={config.speeds.length - 1}
           step={1}
-          labels={downloadSpeedLabels}
+          labels={speedLabels}
           value={down}
           tooltip={false}
           onChange={value => setDown(value)}
@@ -160,3 +158,10 @@ function App() {
 }
 
 export default App;
+export const getDefQueryForSpeed = (field, speed) => {
+  if (speed === 'all') {
+    return '1 = 1';
+  }
+
+  return `${field} >= ${speed}`;
+};
