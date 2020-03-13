@@ -72,7 +72,7 @@ function App() {
         </LayerSelectorContainer>,
         selectorNode);
 
-      providerLayers.current = lodash.range(9).reverse().map(index => {
+      providerLayers.current = lodash.range(6).reverse().map(index => {
         const layer = new FeatureLayer({
           url: `${config.urls.providerCoverage}/${index}`,
           opacity: 0.5,
