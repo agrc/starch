@@ -28,7 +28,7 @@ with arcpy.EnvManager(workspace=database):
         dissolved = f'{dissolved_prefix}{scale}'
         hexagons = f'{hexagons_prefix}{scale}'
 
-        for fc_delete in [analysis, dissolved] + [f'layer[0]{scale}' for layer in layer_infos]:
+        for fc_delete in [analysis, dissolved] + [f'{layer[0]}{scale}' for layer in layer_infos]:
             if arcpy.Exists(fc_delete):
                 print(f'deleting {fc_delete}')
                 arcpy.management.Delete(fc_delete)
@@ -58,6 +58,7 @@ with arcpy.EnvManager(workspace=database):
             print(f'exporting {fc_name}')
             layer = arcpy.management.MakeFeatureLayer(dissolved, f'{fc_name}_layer', query)
             arcpy.management.CopyFeatures(layer, fc_name)
+            arcpy.management.Delete(layer)
 
         print('deleting layer...')
         arcpy.management.Delete(provider_coverage_layer)
