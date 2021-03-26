@@ -1,6 +1,6 @@
 {
-  "name": "atlas",
-  "version": "5.0.5",
+  "name": "broadband",
+  "version": "2.11.2",
   "private": true,
   "dependencies": {
     "@agrc/dart-board": "^3.3.0",
@@ -30,7 +30,7 @@
     "build": "env-cmd -e development react-scripts build",
     "cypress:open": "cypress open",
     "cypress:run": "npm start & wait-on http://localhost:3000 && cypress run",
-    "deploy:prod": "wonkavision clean && wonkavision zip && env-cmd -e production wonkavision ship ./deploy/deploy.zip wwwroot/atlas && env-cmd -e production wonkavision unzip wwwroot/atlas",
+    "deploy:prod": "wonkavision clean && wonkavision zip && env-cmd -e production wonkavision ship ./deploy/deploy.zip wwwroot/broadband && env-cmd -e production wonkavision unzip wwwroot/broadband",
     "eject": "react-scripts eject",
     "format": "prettier --write src --ignore-path ./.gitignore",
     "lint": "eslint src",

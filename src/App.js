@@ -122,7 +122,7 @@ export default function App() {
 
   return (
     <div className="app">
-      <Header title="Atlas Utah" version={version} />
+      <Header title="Utah Residential Broadband" version={version} />
       {showIdentify ? (
         <ErrorBoundary FallbackComponent={ErrorFallback}>
           <IdentifyContainer show={setShowIdentify}>
