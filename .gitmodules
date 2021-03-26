@@ -1,3 +1,0 @@
-[submodule "scripts/agrc"]
-	path = scripts/agrc
-	url = https://github.com/agrc/agrc.python
