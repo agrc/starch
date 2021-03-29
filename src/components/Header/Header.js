@@ -1,18 +1,26 @@
 import React from 'react';
 import './Header.css';
-import logo from './agrc_logo.jpg';
-import config from '../../config';
+import propTypes from 'prop-types';
 
-export default function Header({ title, version }) {
+function Header({ title }) {
   return (
     <div className="app__header">
       <h1 className="header__heading">
         <span>{title}</span>
-        <a className="heading__version" href="/changelog.html" target="_blank" rel="noopener">
-          {version}
+        <a
+          className="heading__version"
+          href="https://github.com/agrc/broadband/blob/main/CHANGELOG.md"
+          target="_blank"
+          rel="noreferrer"
+        >
+          {process.env.REACT_APP_VERSION}
         </a>
       </h1>
-      {window.innerWidth >= config.MIN_DESKTOP_WIDTH && <img src={logo} className="heading__img" alt="agrc logo" />}
     </div>
   );
 }
+Header.propTypes = {
+  title: propTypes.string.isRequired,
+};
+
+export default Header;
