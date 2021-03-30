@@ -1,0 +1,54 @@
+name: Node.js CI
+
+on:
+  push:
+    paths:
+      - "src/**"
+      - ".github/workflows/nodejs.yaml"
+      - "package.json"
+      - "cypress/**"
+      - "cypress.json"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+
+      - name: Cache Node.js modules
+        uses: actions/cache@v2
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+            ${{ runner.OS }}-
+
+      - run: npm ci
+
+      - run: npm run build:test --if-present
+        env:
+          CI: false
+
+      - run: npm test -- --watchAll=false
+
+  cypress:
+    runs-on: ubuntu-latest
+    env:
+      REACT_APP_DISCOVER: ${{ secrets.REACT_APP_DISCOVER }}
+      REACT_APP_PRINT_PROXY: ${{ secrets.REACT_APP_PRINT_PROXY }}
+      REACT_APP_WEB_API: ${{ secrets.REACT_APP_WEB_API }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Run Cypress Tests
+        uses: cypress-io/github-action@v2
+        with:
+          start: npm run start:no-env
+          wait-on: 'http://localhost:3000'
