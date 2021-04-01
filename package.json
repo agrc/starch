@@ -12,6 +12,7 @@
     "@fortawesome/react-fontawesome": "^0.1.14",
     "bootstrap": "^4.6.0",
     "downshift": "^6.1.0",
+    "lodash.throttle": "^4.1.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-error-boundary": "^3.1.1",

@@ -1,27 +1,29 @@
-import React, { useRef, useEffect } from 'react';
-import MapView from '@arcgis/core/views/MapView';
-import WebMap from '@arcgis/core/WebMap';
-import { once } from '@arcgis/core/core/watchUtils';
+import './Map.css';
 import addMapPropsToGlobal from './addMapPropsToGlobal';
 import propTypes from 'prop-types';
-import './Map.css';
+import React, { useRef, useEffect } from 'react';
+import WebMap from '@arcgis/core/WebMap';
+import MapView from '@arcgis/core/views/MapView';
 
-const Map = ({ onClick, setView, zoomToGraphic, view, webMapId }) => {
+const Map = ({ onClick, setView, view, webMapId, children, zoomToExtent, initialExtent }) => {
   const mapDiv = useRef(null);
-  const displayedZoomGraphic = useRef(null);
 
   useEffect(() => {
-    if (!mapDiv.current) {
+    if (!mapDiv.current || view) {
       return;
     }
     console.log('map init');
 
     const map = new WebMap({ portalItem: { id: webMapId } });
     const mapView = new MapView({
+      extent: initialExtent,
       container: mapDiv.current,
       map,
       ui: {
         components: ['zoom'],
+      },
+      constraints: {
+        snapToZoom: true,
       },
     });
 
@@ -32,56 +34,27 @@ const Map = ({ onClick, setView, zoomToGraphic, view, webMapId }) => {
     mapView.on('click', onClick);
 
     setView(mapView);
-  }, [onClick, setView, webMapId]);
+  }, [initialExtent, onClick, setView, view, webMapId]);
 
   useEffect(() => {
-    if (!zoomToGraphic?.graphic) {
-      return;
-    }
+    if (!zoomToExtent || !view) return;
 
-    if (!Array.isArray(zoomToGraphic.graphic)) {
-      zoomToGraphic.graphic = [zoomToGraphic.graphic];
-    }
+    view.goTo(zoomToExtent);
+  }, [zoomToExtent, view]);
 
-    let zoom;
-    if (!zoomToGraphic.zoom) {
-      if (zoomToGraphic.graphic.every((graphic) => graphic.geometry.type === 'point')) {
-        zoom = {
-          target: zoomToGraphic.graphic,
-          zoom: view.map.basemap.baseLayers.items[0].tileInfo.lods.length - 5,
-        };
-      } else {
-        zoom = {
-          target: zoomToGraphic.graphic,
-        };
-      }
-    }
-
-    if (displayedZoomGraphic.current) {
-      view.graphics.removeMany(displayedZoomGraphic.current);
-    }
-
-    displayedZoomGraphic.current = zoom.target;
-
-    view.graphics.addMany(zoom.target);
-
-    view.goTo(zoom).then(() => {
-      if (!zoom.preserve) {
-        once(view, 'extent', () => {
-          view.graphics.removeAll();
-        });
-      }
-    });
-  }, [zoomToGraphic, view]);
-
-  return <div ref={mapDiv}></div>;
+  return (
+    <div className="map-container" ref={mapDiv}>
+      {children}
+    </div>
+  );
 };
 Map.propTypes = {
   onClick: propTypes.func.isRequired,
   setView: propTypes.func.isRequired,
-  zoomToGraphic: propTypes.object,
   view: propTypes.instanceOf(MapView),
   webMapId: propTypes.string,
+  zoomToExtent: propTypes.object,
+  initialExtent: propTypes.object,
 };
 
 export default Map;
