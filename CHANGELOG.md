@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0-0](https://github.com/agrc/broadband/compare/v2.11.2...v3.0.0-0) (2021-04-01)
+
+
+### Features
+
+* add AOI modal and search bar in map ([5bd7d8d](https://github.com/agrc/broadband/commit/5bd7d8d7ccc9c5d41eb55164a980cf3706075a30)), closes [#122](https://github.com/agrc/broadband/issues/122)
+* add simple cypress test ([91a779b](https://github.com/agrc/broadband/commit/91a779b9b5c40cb2c316ea7153b22f74728f6f28))
+* another try at optimizing the data ([ab7b0b2](https://github.com/agrc/broadband/commit/ab7b0b25b33648ab6ea6d7c942c7692a4ea3bc90))
+
+
+### Bug Fixes
+
+* add missing mock for tests ([269943c](https://github.com/agrc/broadband/commit/269943c2ab3486ab039c6d422aca06b917d6fdd1))
+* fix bower resolutions ([4958c1a](https://github.com/agrc/broadband/commit/4958c1a0d64de35d94200c95a25a3dd5242dcd8e))
+
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
 # Legacy Changelog
 <h2>2.11.2 <small>Sept 3, 2020</small></h2>
 <ul>
