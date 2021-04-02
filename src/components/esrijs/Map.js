@@ -5,8 +5,20 @@ import React, { useRef, useEffect } from 'react';
 import WebMap from '@arcgis/core/WebMap';
 import MapView from '@arcgis/core/views/MapView';
 
-const Map = ({ onClick, setView, view, webMapId, children, zoomToExtent, initialExtent }) => {
+const Map = ({ onClick, setView, view, webMapId, children, zoomToExtent, initialExtent, filter }) => {
   const mapDiv = useRef(null);
+  const wirelineLayers = useRef([]);
+  const fixedLayers = useRef([]);
+  const mobileLayers = useRef([]);
+
+  const syncFilter = React.useCallback(() => {
+    const sync = (type) => {
+      return (layer) => (layer.visible = filter.transType[type]);
+    };
+    wirelineLayers.current.forEach(sync('wireline'));
+    fixedLayers.current.forEach(sync('fixed'));
+    mobileLayers.current.forEach(sync('mobile'));
+  }, [filter]);
 
   useEffect(() => {
     if (!mapDiv.current || view) {
@@ -27,6 +39,14 @@ const Map = ({ onClick, setView, view, webMapId, children, zoomToExtent, initial
       },
     });
 
+    map.when(() => {
+      wirelineLayers.current = map.layers.filter((layer) => layer.title.toLowerCase().match(/wireline/));
+      fixedLayers.current = map.layers.filter((layer) => layer.title.toLowerCase().match(/fixed/));
+      mobileLayers.current = map.layers.filter((layer) => layer.title.toLowerCase().match(/mobile/));
+
+      syncFilter();
+    });
+
     if (window.Cypress) {
       addMapPropsToGlobal(mapView);
     }
@@ -34,13 +54,17 @@ const Map = ({ onClick, setView, view, webMapId, children, zoomToExtent, initial
     mapView.on('click', onClick);
 
     setView(mapView);
-  }, [initialExtent, onClick, setView, view, webMapId]);
+  }, [initialExtent, onClick, setView, syncFilter, view, webMapId]);
 
   useEffect(() => {
     if (!zoomToExtent || !view) return;
 
     view.goTo(zoomToExtent);
   }, [zoomToExtent, view]);
+
+  React.useEffect(() => {
+    syncFilter();
+  }, [filter, syncFilter]);
 
   return (
     <div className="map-container" ref={mapDiv}>
@@ -55,6 +79,7 @@ Map.propTypes = {
   webMapId: propTypes.string,
   zoomToExtent: propTypes.object,
   initialExtent: propTypes.object,
+  filter: propTypes.object.isRequired,
 };
 
 export default Map;
