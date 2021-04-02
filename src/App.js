@@ -1,4 +1,4 @@
-import './App.css';
+import './App.scss';
 import { ErrorBoundary } from 'react-error-boundary';
 import { Sherlock, LocatorSuggestProvider } from '@agrc/sherlock';
 import * as React from 'react';

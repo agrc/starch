@@ -1,4 +1,4 @@
-import './Map.css';
+import './Map.scss';
 import addMapPropsToGlobal from './addMapPropsToGlobal';
 import propTypes from 'prop-types';
 import React, { useRef, useEffect } from 'react';
