@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0-1](https://github.com/agrc/broadband/compare/v3.0.0-0...v3.0.0-1) (2021-04-02)
+
+
+### Features
+
+* add simple parent trans type checkboxes ([5aeba2d](https://github.com/agrc/broadband/commit/5aeba2db68af4cc3c3a145b8e6e5377223dd3715)), closes [#110](https://github.com/agrc/broadband/issues/110)
+* add simple sidebar layout ([27da8c3](https://github.com/agrc/broadband/commit/27da8c3261a39ce75c9e59b09ab46178bcc53168))
+
 ## [3.0.0-0](https://github.com/agrc/broadband/compare/v2.11.2...v3.0.0-0) (2021-04-01)
 
 
