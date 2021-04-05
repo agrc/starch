@@ -15,12 +15,12 @@ html,
   display: flex;
   flex-direction: row;
   .main-content {
-    background-color: $light-blue;
+    background-color: $light-default;
     width: 100%;
     height: 100%;
   }
 }
 
 .sherlock .input-group button.disabled {
-  background-color: $blue;
+  background-color: $default;
 }
