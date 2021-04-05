@@ -1,4 +1,31 @@
 .map-container {
   height: 100%;
   width: 100%;
+
+  // make esri widget take up way less space
+  .esri-component.esri-legend.esri-widget.esri-widget--panel {
+    width: auto;
+    background-color: #ffffff87;
+    .esri-legend__layer-table {
+      margin: 0;
+    }
+    .esri-widget__heading {
+      margin: 0;
+    }
+    &.esri-widget--panel {
+      padding: 5px;
+    }
+    .esri-legend__service {
+      padding: 0;
+      border: none;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0;
+    }
+    .esri-legend__layer-cell--info {
+      display: none;
+    }
+  }
 }

@@ -4,6 +4,7 @@ import propTypes from 'prop-types';
 import React, { useRef, useEffect } from 'react';
 import WebMap from '@arcgis/core/WebMap';
 import MapView from '@arcgis/core/views/MapView';
+import Legend from '@arcgis/core/widgets/Legend';
 
 const Map = ({ onClick, setView, view, webMapId, children, zoomToExtent, initialExtent, filter }) => {
   const mapDiv = useRef(null);
@@ -45,6 +46,13 @@ const Map = ({ onClick, setView, view, webMapId, children, zoomToExtent, initial
       mobileLayers.current = map.layers.filter((layer) => layer.title.toLowerCase().match(/mobile/));
 
       syncFilter();
+      mapView.when(() => {
+        const legend = new Legend({
+          view: mapView,
+        });
+
+        mapView.ui.add(legend, 'bottom-right');
+      });
     });
 
     if (window.Cypress) {
