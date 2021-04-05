@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0-2](https://github.com/agrc/broadband/compare/v3.0.0-1...v3.0.0-2) (2021-04-05)
+
+
+### Bug Fixes
+
+* add missing test mock ([1408338](https://github.com/agrc/broadband/commit/1408338f03552d081f77bb50d409d44e37e54e5b))
+* better checkbox colors ([bb860aa](https://github.com/agrc/broadband/commit/bb860aa23d49011a6f96b148696f6d7f5adf4df8))
+* more generic color variable names ([a8e0ba8](https://github.com/agrc/broadband/commit/a8e0ba84bd7fd2977433bd694636529c1aa71e32))
+
 ## [3.0.0-1](https://github.com/agrc/broadband/compare/v3.0.0-0...v3.0.0-1) (2021-04-02)
 
 
