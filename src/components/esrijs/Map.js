@@ -5,20 +5,46 @@ import React, { useRef, useEffect } from 'react';
 import WebMap from '@arcgis/core/WebMap';
 import MapView from '@arcgis/core/views/MapView';
 import Legend from '@arcgis/core/widgets/Legend';
+import config from '../../config';
+
+export function getQueryFromFilter(filter) {
+  const transTypeValues = Object.keys(filter.transType).reduce((previous, key) => {
+    if (filter.transType[key] && config.transTechValues[key]) {
+      return previous.concat(config.transTechValues[key]);
+    }
+    return previous;
+  }, []);
+
+  return `${config.fieldNames.TransTech} IN (${transTypeValues.join(',')})`;
+}
 
 const Map = ({ onClick, setView, view, webMapId, children, zoomToExtent, initialExtent, filter }) => {
   const mapDiv = useRef(null);
+
+  // these are layer views
   const wirelineLayers = useRef([]);
   const fixedLayers = useRef([]);
   const mobileLayers = useRef([]);
 
-  const syncFilter = React.useCallback(() => {
-    const sync = (type) => {
-      return (layer) => (layer.visible = filter.transType[type]);
+  const syncMapWithFilter = React.useCallback(() => {
+    const syncVisibility = (visible) => {
+      return (layer) => (layer.visible = visible);
     };
-    wirelineLayers.current.forEach(sync('wireline'));
-    fixedLayers.current.forEach(sync('fixed'));
-    mobileLayers.current.forEach(sync('mobile'));
+    fixedLayers.current.forEach(syncVisibility(filter.transType.fixed));
+    mobileLayers.current.forEach(syncVisibility(filter.transType.mobile));
+    wirelineLayers.current.forEach(
+      syncVisibility(filter.transType.cable || filter.transType.dsl || filter.transType.fiber)
+    );
+
+    // for each visible layer, apply def query
+    const visibleLayers = fixedLayers.current
+      .concat(mobileLayers.current, wirelineLayers.current)
+      .filter((layer) => layer.visible);
+
+    const query = getQueryFromFilter(filter);
+    console.log('new query: ', query);
+
+    visibleLayers.forEach((layer) => (layer.filter = { where: query }));
   }, [filter]);
 
   useEffect(() => {
@@ -40,12 +66,17 @@ const Map = ({ onClick, setView, view, webMapId, children, zoomToExtent, initial
       },
     });
 
-    map.when(() => {
-      wirelineLayers.current = map.layers.filter((layer) => layer.title.toLowerCase().match(/wireline/));
-      fixedLayers.current = map.layers.filter((layer) => layer.title.toLowerCase().match(/fixed/));
-      mobileLayers.current = map.layers.filter((layer) => layer.title.toLowerCase().match(/mobile/));
+    function getLayerViews(regex) {
+      const layers = map.layers.filter((layer) => layer.title.toLowerCase().match(regex));
 
-      syncFilter();
+      return Promise.all(layers.map((layer) => mapView.whenLayerView(layer)));
+    }
+    map.when(async () => {
+      wirelineLayers.current = await getLayerViews(/wireline/);
+      fixedLayers.current = await getLayerViews(/fixed/);
+      mobileLayers.current = await getLayerViews(/mobile/);
+
+      syncMapWithFilter();
       mapView.when(() => {
         const legend = new Legend({
           view: mapView,
@@ -62,7 +93,7 @@ const Map = ({ onClick, setView, view, webMapId, children, zoomToExtent, initial
     mapView.on('click', onClick);
 
     setView(mapView);
-  }, [initialExtent, onClick, setView, syncFilter, view, webMapId]);
+  }, [initialExtent, onClick, setView, syncMapWithFilter, view, webMapId]);
 
   useEffect(() => {
     if (!zoomToExtent || !view) return;
@@ -71,8 +102,8 @@ const Map = ({ onClick, setView, view, webMapId, children, zoomToExtent, initial
   }, [zoomToExtent, view]);
 
   React.useEffect(() => {
-    syncFilter();
-  }, [filter, syncFilter]);
+    syncMapWithFilter();
+  }, [filter, syncMapWithFilter]);
 
   return (
     <div className="map-container" ref={mapDiv}>

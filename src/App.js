@@ -22,7 +22,9 @@ const ErrorFallback = ({ error }) => {
 
 const defaultFilter = {
   transType: {
-    wireline: true,
+    cable: true,
+    dsl: true,
+    fiber: true,
     fixed: true,
     mobile: false,
   },
@@ -31,7 +33,13 @@ const defaultFilter = {
 function filterReducer(draft, action) {
   switch (action.type) {
     case 'transType':
-      draft.transType[action.meta] = action.payload;
+      if (action.meta === 'wireline') {
+        draft.transType.cable = action.payload;
+        draft.transType.dsl = action.payload;
+        draft.transType.fiber = action.payload;
+      } else {
+        draft.transType[action.meta] = action.payload;
+      }
       break;
 
     case 'reset':
