@@ -7,15 +7,33 @@ import MapView from '@arcgis/core/views/MapView';
 import Legend from '@arcgis/core/widgets/Legend';
 import config from '../../config';
 
-export function getQueryFromFilter(filter) {
-  const transTypeValues = Object.keys(filter.transType).reduce((previous, key) => {
-    if (filter.transType[key] && config.transTechValues[key]) {
+export function getTransTechQuery(filter, fieldName) {
+  const transTypeValues = Object.keys(filter).reduce((previous, key) => {
+    if (filter[key] && config.transTechValues[key]) {
       return previous.concat(config.transTechValues[key]);
     }
     return previous;
   }, []);
 
-  return `${config.fieldNames.TransTech} IN (${transTypeValues.join(',')})`;
+  if (Object.keys(filter).every((key) => filter[key])) {
+    return null;
+  }
+
+  return `${fieldName} IN (${transTypeValues.join(',')})`;
+}
+
+export function getSpeedQuery(speed, fieldName) {
+  return speed ? `${fieldName} >= ${speed}` : null;
+}
+
+function getQueryFromFilter(filter) {
+  const queries = [
+    getTransTechQuery(filter.transType, config.fieldNames.TransTech),
+    getSpeedQuery(filter.speed.up, config.fieldNames.MAXADUP),
+    getSpeedQuery(filter.speed.down, config.fieldNames.MAXADDOWN),
+  ].filter((query) => query);
+
+  return queries.length > 0 ? queries.join(' AND ') : null;
 }
 
 const Map = ({ onClick, setView, view, webMapId, children, zoomToExtent, initialExtent, filter }) => {
@@ -44,7 +62,7 @@ const Map = ({ onClick, setView, view, webMapId, children, zoomToExtent, initial
     const query = getQueryFromFilter(filter);
     console.log('new query: ', query);
 
-    visibleLayers.forEach((layer) => (layer.filter = { where: query }));
+    visibleLayers.forEach((layer) => (layer.filter = query ? { where: query } : null));
   }, [filter]);
 
   useEffect(() => {

@@ -7,6 +7,7 @@
     "@agrc/dart-board": "^3.3.0",
     "@agrc/sherlock": "^2.3.0",
     "@arcgis/core": "^4.18.1",
+    "@esri/calcite-components": "*",
     "@fortawesome/fontawesome-svg-core": "^1.2.34",
     "@fortawesome/free-solid-svg-icons": "^5.15.2",
     "@fortawesome/react-fontawesome": "^0.1.14",

@@ -2,6 +2,7 @@ import * as React from 'react';
 import './Sidebar.scss';
 import { FormGroup, Label, CustomInput, Button } from 'reactstrap';
 import propTypes from 'prop-types';
+import Slider from './Slider';
 
 const Sidebar = ({ filter, dispatchFilter }) => {
   function onTransTechChange(event) {
@@ -82,6 +83,10 @@ const Sidebar = ({ filter, dispatchFilter }) => {
           />
         </div>
       </FormGroup>
+
+      <Slider label="Upload" value={filter.speed.up} dispatch={dispatchFilter} dispatchType="up" />
+      <Slider label="Download" value={filter.speed.down} dispatch={dispatchFilter} dispatchType="down" />
+
       <Button className="w-100" onClick={() => dispatchFilter({ type: 'reset' })}>
         Reset Filter
       </Button>

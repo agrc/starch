@@ -28,6 +28,10 @@ const defaultFilter = {
     fixed: true,
     mobile: false,
   },
+  speed: {
+    up: null,
+    down: null,
+  },
 };
 
 function filterReducer(draft, action) {
@@ -40,6 +44,10 @@ function filterReducer(draft, action) {
       } else {
         draft.transType[action.meta] = action.payload;
       }
+      break;
+
+    case 'speed':
+      draft.speed[action.meta] = action.payload;
       break;
 
     case 'reset':
