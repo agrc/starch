@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0-3](https://github.com/agrc/broadband/compare/v3.0.0-2...v3.0.0-3) (2021-04-13)
+
+
+### Features
+
+* add legend ([9336066](https://github.com/agrc/broadband/commit/93360662639fa1a8485a74cfc6c0485b10339f74)), closes [#113](https://github.com/agrc/broadband/issues/113)
+* add speed sliders ([ffb821f](https://github.com/agrc/broadband/commit/ffb821f48e739000c2f5c42e179005d1a0acdad9)), closes [#85](https://github.com/agrc/broadband/issues/85)
+* add sub types to wireline filter ([100fcb7](https://github.com/agrc/broadband/commit/100fcb72b0301ccc54b67abababa6496fb9ea00b)), closes [#108](https://github.com/agrc/broadband/issues/108)
+
 ## [3.0.0-2](https://github.com/agrc/broadband/compare/v3.0.0-1...v3.0.0-2) (2021-04-05)
 
 
