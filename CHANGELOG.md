@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.0.0-4](https://github.com/agrc/broadband/compare/v3.0.0-3...v3.0.0-4) (2021-04-13)
+
+
+### Bug Fixes
+
+* handle changing the filter schema between versions ([ca89540](https://github.com/agrc/broadband/commit/ca895407131ec47aa2a88e442fbd9ee08120ce6c))
+
 ## [3.0.0-3](https://github.com/agrc/broadband/compare/v3.0.0-2...v3.0.0-3) (2021-04-13)
 
 
