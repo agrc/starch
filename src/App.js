@@ -59,8 +59,23 @@ function filterReducer(draft, action) {
 }
 
 const filterKey = 'broadband:filter';
-const localStorageItem = localStorage.getItem(filterKey);
-const initialFilter = localStorageItem ? JSON.parse(localStorageItem) : defaultFilter;
+const filterVersion = 1; // bump this any time the filter object shape changes
+function getInitialFilter() {
+  try {
+    const localStorageItem = localStorage.getItem(filterKey);
+    if (localStorageItem) {
+      const storedFilter = JSON.parse(localStorageItem);
+
+      return storedFilter?.version === filterVersion ? storedFilter : defaultFilter;
+    }
+  } catch (error) {
+    console.error(error);
+
+    return defaultFilter;
+  }
+
+  return defaultFilter;
+}
 
 export default function App() {
   console.log('App render');
@@ -70,10 +85,10 @@ export default function App() {
   const [mapView, setMapView] = React.useState(null);
   const initialExtent = persistMapExtent(mapView);
   const [zoomToExtent, setZoomToExtent] = React.useState(null);
-  const [filter, dispatchFilter] = useImmerReducer(filterReducer, initialFilter);
+  const [filter, dispatchFilter] = useImmerReducer(filterReducer, getInitialFilter());
 
   React.useEffect(() => {
-    localStorage.setItem(filterKey, JSON.stringify(filter));
+    localStorage.setItem(filterKey, JSON.stringify({ ...filter, version: filterVersion }));
   }, [filter]);
 
   return (
